@@ -5,7 +5,8 @@ from rest_framework.response import Response
 
 from .books import books
 from .models  import Book
-from .serializers import BookSerializer
+from .serializers import BookSerializer, UserSerializer, UserSerializerWithToken
+
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -14,9 +15,10 @@ class MyMyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        #Add custom claims
-        data['username'] = self.user.username
-        data['email'] = self.user.email
+        serializer = UserSerializerWithToken(self.user).data
+
+        for k, v in serializer.items():
+            data[k] = v
 
         return data
 
@@ -34,6 +36,13 @@ def getRoutes(request):
         'api/books/create'
     ]
     return Response(routes)
+
+@api_view(['GET'])
+def getUserProfile(request):
+    user = request.user
+
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def getBooks(request):
