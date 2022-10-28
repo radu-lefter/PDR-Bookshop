@@ -7,6 +7,24 @@ from .books import books
 from .models  import Book
 from .serializers import BookSerializer
 
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+class MyMyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        #Add custom claims
+        data['username'] = self.user.username
+        data['email'] = self.user.email
+
+        return data
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyMyTokenObtainPairSerializer
+
+
 # Create your views here.
 
 @api_view(['GET'])
