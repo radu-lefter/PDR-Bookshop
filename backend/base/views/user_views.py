@@ -1,19 +1,16 @@
 from django.shortcuts import render
-from django.http import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
-from django.contrib.auth.hashers import make_password
-from rest_framework import status
 
 from django.contrib.auth.models import User
-from .books import books
-from .models  import Book
-from .serializers import BookSerializer, UserSerializer, UserSerializerWithToken
-
-
+from base.serializers import BookSerializer, UserSerializer, UserSerializerWithToken
+# Create your views here.
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+
+from django.contrib.auth.hashers import make_password
+from rest_framework import status
 
 class MyMyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
@@ -29,19 +26,6 @@ class MyMyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyMyTokenObtainPairSerializer
-
-
-# Create your views here.
-
-@api_view(['GET'])
-def getRoutes(request):
-    routes=[
-        'api/books', 
-        'api/books/create'
-    ]
-    return Response(routes)
-
-#users
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -74,19 +58,3 @@ def registerUser(request):
     except:
         message = {'detail': 'User with this email already exists'}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
-
-
-#books    
-
-@api_view(['GET'])
-def getBooks(request):
-    books = Book.objects.all()
-    serializer = BookSerializer(books, many=True)
-    return Response(serializer.data)
-    
-
-@api_view(['GET'])
-def getBook(request, pk):
-    book = Book.objects.get(_id=pk)
-    serializer = BookSerializer(book, many=False)
-    return Response(serializer.data)
