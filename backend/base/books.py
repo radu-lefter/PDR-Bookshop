@@ -4,7 +4,7 @@ books = [
     'name': 'Emma',
     'image': '/images/emma.jpg',
     'description':
-      'A rich girl that lives a confortable life tries to play at matchmaking and finds out she is not terribly good at it.',
+      'A rich girl that lives a comfortable life tries to play at matchmaking and finds out she is not terribly good at it.',
     'publisher': 'Penguin',
     'genre': 'romance',
     'price': 9.99,
