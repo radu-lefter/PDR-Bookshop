@@ -5,7 +5,7 @@ import Book from '../components/Book';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { listBooks } from '../actions/bookActions';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Paginate from '../components/Paginate';
 import BookCarousel from '../components/BookCarousel'; 
 
@@ -16,14 +16,12 @@ const HomeScreen = () => {
   //const pageNumber = params.pageNumber || 1;
 
   const bookList = useSelector((state) => state.bookList);
-  //const { loading, error, books, page, pages } = bookList;
-  const { loading, error, books } = bookList;
-  console.log(books)
+  const { loading, error, books, page, pages } = bookList;
+
 
   useEffect(() => {
     dispatch(listBooks(keyword));
   }, [dispatch, keyword]);
-  //[dispatch, keyword, pageNumber]);
 
   return (
     <>
@@ -34,6 +32,7 @@ const HomeScreen = () => {
           Go Back
         </Link>
       )} */}
+      {!keyword && <BookCarousel />}
       <h1>Latest books</h1>
       {loading ? (
         <Loader />
@@ -48,11 +47,11 @@ const HomeScreen = () => {
               </Col>
             ))}
           </Row>
-          {/* <Paginate
+          <Paginate
             pages={pages}
             page={page}
             keyword={keyword ? keyword : ''}
-          /> */}
+          /> 
         </>
       )}
     </>

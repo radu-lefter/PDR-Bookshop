@@ -23,13 +23,12 @@ import {
   BOOK_TOP_FAIL,
 } from '../constants/bookConstants'
 
-export const listBooks = (keyword = '', pageNumber = '') => async (dispatch) => {
+export const listBooks = (keyword = '', ) => async (dispatch) => {
   try {
     dispatch({ type: BOOK_LIST_REQUEST })
 
-    //const { data } = await axios.get(`/api/books?keyword=${keyword}&pageNumber=${pageNumber}`)
-    const { data } = await axios.get(`/api/books/`)
-   //console.log(data);
+    const { data } = await axios.get(`/api/books/${keyword}`)
+
 
     dispatch({
       type: BOOK_LIST_SUCCESS,
@@ -39,8 +38,8 @@ export const listBooks = (keyword = '', pageNumber = '') => async (dispatch) => 
     dispatch({
       type: BOOK_LIST_FAIL,
       payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
+        error.response && error.response.data.detail
+          ? error.response.data.detail
           : error.message,
     })
   }
@@ -60,8 +59,8 @@ export const listBookDetails = (id) => async (dispatch) => {
     dispatch({
       type: BOOK_DETAILS_FAIL,
       payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
+        error.response && error.response.data.detail
+          ? error.response.data.detail
           : error.message,
     })
   }
@@ -79,6 +78,7 @@ export const deleteBook = (id) => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        'Content-type': 'application/json',
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
@@ -92,8 +92,8 @@ export const deleteBook = (id) => async (dispatch, getState) => {
     dispatch({
       type: BOOK_DELETE_FAIL,
       payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
+        error.response && error.response.data.detail
+          ? error.response.data.detail
           : error.message,
     })
   }
@@ -111,11 +111,12 @@ export const createBook = () => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        'Content-type': 'application/json',
         Authorization: `Bearer ${userInfo.token}`,
       },
     }
 
-    const { data } = await axios.post(`/api/books`, {}, config)
+    const { data } = await axios.post(`/api/books/create/`, {}, config)
 
     dispatch({
       type: BOOK_CREATE_SUCCESS,
@@ -125,8 +126,8 @@ export const createBook = () => async (dispatch, getState) => {
     dispatch({
       type: BOOK_CREATE_FAIL,
       payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
+        error.response && error.response.data.detail
+          ? error.response.data.detail
           : error.message,
     })
   }
@@ -150,7 +151,7 @@ export const updateBook = (book) => async (dispatch, getState) => {
     }
 
     const { data } = await axios.put(
-      `/api/books/${book._id}`,
+      `/api/books/update/${book._id}`,
       book,
       config
     )
@@ -163,8 +164,8 @@ export const updateBook = (book) => async (dispatch, getState) => {
     dispatch({
       type: BOOK_UPDATE_FAIL,
       payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
+        error.response && error.response.data.detail
+          ? error.response.data.detail
           : error.message,
     })
   }
@@ -199,8 +200,8 @@ export const createBookReview = (bookId, review) => async (
     dispatch({
       type: BOOK_CREATE_REVIEW_FAIL,
       payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
+        error.response && error.response.data.detail
+          ? error.response.data.detail
           : error.message,
     })
   }
@@ -220,8 +221,8 @@ export const listTopBooks = () => async (dispatch) => {
     dispatch({
       type: BOOK_TOP_FAIL,
       payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
+        error.response && error.response.data.detail
+          ? error.response.data.detail
           : error.message,
     })
   }

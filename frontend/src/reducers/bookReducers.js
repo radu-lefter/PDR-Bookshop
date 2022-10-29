@@ -26,23 +26,15 @@ import {
 } from '../constants/bookConstants';
 
 export const bookListReducer = (state = { books: [] }, action) => {
-  
   switch (action.type) {
     case BOOK_LIST_REQUEST:
       return { loading: true, books: [] };
-    // case BOOK_LIST_SUCCESS:
-    //   return {
-    //     loading: false,
-    //     books: action.payload.books,
-    //     pages: action.payload.pages,
-    //     page: action.payload.page,
-    //   };
     case BOOK_LIST_SUCCESS:
-      console.log(action.payload)
       return {
         loading: false,
-        books: action.payload
-        //books: action.payload.books
+        books: action.payload.books,
+        page: action.payload.page,
+        pages: action.payload.pages,
       };
     case BOOK_LIST_FAIL:
       return { loading: false, error: action.payload };
